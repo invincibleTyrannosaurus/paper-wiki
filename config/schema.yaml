@@ -1,0 +1,65 @@
+# paper-wiki 统一配置模式 v1.0
+# 位置: D:\paper-wiki\paper-wiki-config.yaml
+
+# === 基础设置 ===
+version: "1.0"
+language: "zh"                    # 输出语言: zh / en
+
+# === 阅读方向配置 ===
+research_direction:
+  name: "联邦学习后门攻击"
+  description: "研究联邦学习场景下的后门攻击与防御"
+  keywords:
+    - "federated learning"
+    - "backdoor attack"
+    - "model poisoning"
+    - "Byzantine attack"
+  excluded_keywords:
+    - "workshop"
+    - "survey"
+
+# === 搜索配置 ===
+search:
+  arxiv:
+    enabled: true
+    categories: ["cs.LG", "cs.AI", "cs.CR", "cs.DC"]
+    max_results: 50
+    days_back: 7                   # 搜索最近N天
+  semantic_scholar:
+    enabled: true
+    max_results: 30
+    api_key: null
+  dblp:
+    enabled: true
+    conferences:
+      - "NeurIPS"
+      - "ICML"
+      - "ICLR"
+      - "CCS"
+      - "USENIX Security"
+      - "AAAI"
+      - "CVPR"
+      - "ICCV"
+      - "ECCV"
+
+# === 评分配置 ===
+scoring:
+  daily:
+    relevance: 0.40
+    recency: 0.20
+    popularity: 0.30
+    quality: 0.10
+    threshold: 7.0
+  conf:
+    relevance: 0.40
+    popularity: 0.40
+    quality: 0.20
+    threshold: 7.0
+
+# === 目录配置（固定，不可改） ===
+directories:
+  vault: "D:\\paper-wiki"
+  papers: "_sources/papers"
+  references: "references"
+  daily: "10_Daily"
+  graph: "20_Research/PaperGraph"
