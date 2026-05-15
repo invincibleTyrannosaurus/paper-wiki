@@ -30,9 +30,12 @@ Paper Wiki 是统一的论文知识库管理入口，整合以下功能：
 - `/paper-wiki conf <会议名> <年份>`
 - `/paper-wiki search <查询>`
 - `/paper-wiki sync`
+- `/paper-wiki project-init`
 - "论文知识库"
 - "paper wiki"
 - "初始化论文库"
+- "初始化项目"
+- "创建项目方法"
 
 ---
 
@@ -148,6 +151,7 @@ arXiv分类:
   {VAULT_PATH}\skills\              (技能)
   {VAULT_PATH}\synthesis\           (综合)
   {VAULT_PATH}\journal\             (日志)
+  {VAULT_PATH}\projects\            (研究项目)
 ```
 
 #### 步骤 6: 用户确认
@@ -170,8 +174,24 @@ mkdir -p "{VAULT_PATH}\entities"
 mkdir -p "{VAULT_PATH}\skills"
 mkdir -p "{VAULT_PATH}\synthesis"
 mkdir -p "{VAULT_PATH}\journal"
+mkdir -p "{VAULT_PATH}\projects"
 mkdir -p "{VAULT_PATH}\20_Research\PaperGraph"
 ```
+
+#### 步骤 7b: 项目研究内容初始化（可选）
+
+调用子工作流 [workflows/project-init/SKILL.md](workflows/project-init/SKILL.md)：
+
+询问用户是否有正在进行的自主研究项目或已有的方法/代码需要追踪：
+
+```
+你是否有正在进行的自主研究项目或已有的方法/代码需要追踪？(y/n)
+```
+
+- 输入 `y` → 执行 project-init 子工作流，创建项目目录结构、方法模板、日志模板
+- 输入 `n` → 跳过，用户后续可随时通过 `/paper-wiki project-init` 补充
+
+详细步骤见 [workflows/project-init/SKILL.md](workflows/project-init/SKILL.md)。
 
 #### 步骤 8: 写入配置文件
 
@@ -305,9 +325,13 @@ updated: "2026-05-10T00:00:00Z"
 - [[entities]] — 人物、会议、工具
 - [[synthesis]] — 综合与综述
 - [[journal]] — 研究日志
+- [[projects]] — 研究项目
 
 ## 统计
 - 已分析论文: 0
+- 研究项目: 0
+- 项目方法: 0
+- 项目日志: 0
 - 今日推荐: 0
 - 知识图谱节点: 0
 
@@ -428,6 +452,18 @@ Vault: {VAULT_PATH}
 
 ---
 
+### 工作流 6: project-init（项目研究内容初始化）
+
+**触发**: `/paper-wiki project-init`、初始化流程自动调用、"初始化项目"、"创建项目方法"
+
+询问用户是否有自研方法和代码，根据方法状态（构思中/已实现/实验中/待复盘/已废弃）创建对应的项目目录结构和模板文件（`projects/{project_name}/methods/`、`journal/`、`experiments/`）。
+
+**前置依赖**: 已初始化的 Vault
+
+**详细步骤**: 见 [workflows/project-init/SKILL.md](workflows/project-init/SKILL.md)
+
+---
+
 ## 路径解析规则
 
 Paper Wiki 的配置分为两层：
@@ -466,6 +502,11 @@ Paper Wiki 的配置分为两层：
 ├── skills\              # 操作指南
 ├── synthesis\           # 综合与综述
 ├── journal\             # 时间戳观察
+├── projects\            # 研究项目（每个项目一个子目录）
+│   └── {project_name}\
+│       ├── methods\     # 项目专属方法设计
+│       ├── journal\     # 项目研究日志/复盘
+│       └── experiments\ # 项目实验记录
 ├── index.md             # 全局索引
 ├── log.md               # 操作日志
 ├── paper-wiki-config.yaml  # 配置文件
@@ -484,6 +525,7 @@ Paper Wiki 的配置分为两层：
 | `conf` | conf-papers | search_conf_papers.py |
 | `search` | paper-search | grep 搜索逻辑 |
 | `sync` | llm-wiki | manifest 管理、索引重建、死链检测 |
+| `project-init` | — | 独立工作流，创建项目目录结构和模板文件 |
 
 ---
 

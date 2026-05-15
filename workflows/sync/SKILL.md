@@ -31,7 +31,11 @@ description: Paper Wiki 知识库维护工作流。扫描文件变更、更新 m
 
 ### 步骤 1: 扫描文件变更
 
-扫描 `{VAULT_PATH}` 下所有 `.md` 文件，对比 `{VAULT_PATH}\.manifest.json` 记录。
+扫描 `{VAULT_PATH}` 下所有 `.md` 文件（包括 `projects/` 子目录中的项目级笔记），对比 `{VAULT_PATH}\.manifest.json` 记录。
+
+扫描范围：
+- 全局目录：`10_Daily/`、`references/`、`concepts/`、`entities/`、`synthesis/`、`journal/`、`_sources/papers/`
+- 项目目录：`projects/*/`（包含 `methods/`、`journal/`、`experiments/` 等子目录）
 
 ### 步骤 2: 更新 manifest
 
@@ -40,17 +44,27 @@ description: Paper Wiki 知识库维护工作流。扫描文件变更、更新 m
 ### 步骤 3: 重建索引
 
 重建 `{VAULT_PATH}\index.md`：
-- 统计各目录文件数量
+- 统计各目录文件数量（含 `projects/` 下的项目级内容）
 - 列出最近更新的笔记
 - 列出高频标签
+- 汇总各项目的方法、日志、实验记录数量
 
 ### 步骤 4: 检查死链
 
 检查所有 wikilink 是否指向存在的文件。
 
+检查范围包括：
+- 全局笔记中的 wikilink
+- 项目级笔记（`projects/{project_name}/**/*.md`）中的 wikilink
+- 跨项目/全局的 wikilink（如 `[[projects/fl-backdoor/methods/rfcba]]` 指向全局路径）
+
 ### 步骤 5: 检查孤儿页面
 
 报告无入链的页面。
+
+分别统计：
+- 全局孤儿页面（无全局或其他页面引用）
+- 项目内孤儿页面（无项目内或其他页面引用）
 
 ### 步骤 6: 输出维护报告
 
